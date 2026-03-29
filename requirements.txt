@@ -1,0 +1,10 @@
+numpy>=1.26
+scipy>=1.11
+pandas>=2.1
+matplotlib>=3.8
+scikit-learn>=1.4
+jupyter>=1.0
+notebook>=7.0
+ipykernel>=6.29
+networkx>=3.2
+joblib>=1.3
