@@ -16,7 +16,7 @@ def plot_decision_tree_figure(
     output_path: str | Path = "figures/pelagia_decision_tree.png",
     dpi: int = 200,
     figsize: tuple[int, int] = (32, 18),
-    fontsize: int = 22,
+    fontsize: int = 32,
 ) -> Path:
     clf = joblib.load(model_path)
 
@@ -44,12 +44,12 @@ def plot_decision_tree_figure(
 def plot_confusion_matrix_heatmap(
     confusion_csv: str | Path = "results/models/confusion_matrix.csv",
     output_path: str | Path = "figures/pelagia_confusion_matrix.png",
-    dpi: int = 200,
-    figsize: tuple[int, int] = (10, 8),
-    label_fontsize: int = 16,
-    tick_fontsize: int = 14,
-    value_fontsize: int = 14,
-    title_fontsize: int = 18,
+    dpi: int = 300,
+    figsize: tuple[int, int] = (11, 9),
+    label_fontsize: int = 18,
+    tick_fontsize: int = 15,
+    value_fontsize: int = 16,
+    title_fontsize: int = 22,
 ) -> Path:
     cm = pd.read_csv(confusion_csv, index_col=0)
 
@@ -57,19 +57,36 @@ def plot_confusion_matrix_heatmap(
     ensure_directory(output_path.parent)
 
     fig, ax = plt.subplots(figsize=figsize)
-    im = ax.imshow(cm.values)
+    im = ax.imshow(cm.values, cmap="viridis")
 
     ax.set_xticks(range(len(cm.columns)))
     ax.set_yticks(range(len(cm.index)))
-    ax.set_xticklabels(cm.columns, rotation=30, ha="right", fontsize=tick_fontsize)
-    ax.set_yticklabels(cm.index, fontsize=tick_fontsize)
+    ax.set_xticklabels(
+        [str(c).replace("_", " ") for c in cm.columns],
+        rotation=30,
+        ha="right",
+        fontsize=tick_fontsize,
+    )
+    ax.set_yticklabels(
+        [str(i).replace("_", " ") for i in cm.index],
+        fontsize=tick_fontsize,
+    )
+
     ax.set_xlabel("Predicted label", fontsize=label_fontsize)
     ax.set_ylabel("True label", fontsize=label_fontsize)
     ax.set_title("Pelagia classifier confusion matrix", fontsize=title_fontsize)
 
     for i in range(cm.shape[0]):
         for j in range(cm.shape[1]):
-            ax.text(j, i, str(cm.iloc[i, j]), ha="center", va="center", fontsize=value_fontsize)
+            ax.text(
+                j,
+                i,
+                str(cm.iloc[i, j]),
+                ha="center",
+                va="center",
+                fontsize=value_fontsize,
+                color="black",
+            )
 
     cbar = fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
     cbar.ax.tick_params(labelsize=tick_fontsize)
