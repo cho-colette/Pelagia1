@@ -1,4 +1,4 @@
-This branch uses 120 synthetic samples per operating state for expanded evaluation.
+This branch uses 120 synthetic samples per operating state with randomized signal generation for stochastic signal evaluation.
 
 # Pelagia1
 
