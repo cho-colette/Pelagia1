@@ -346,6 +346,6 @@ def generate_dataset(
 
 if __name__ == "__main__":
     cfg = SignalConfig(duration_s=120.0, sample_rate_hz=10.0, random_seed=42)
-    df = generate_dataset(cfg, samples_per_state=12)
+    df = generate_dataset(cfg, samples_per_state=120)
     print(df.head())
     print(df["state_label"].value_counts())
