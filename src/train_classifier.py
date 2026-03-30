@@ -49,8 +49,9 @@ def train_classifier(
 ) -> dict:
     df = pd.read_csv(feature_csv)
 
-    X = df[FEATURE_COLUMNS]
-    y = df[TARGET_COLUMN]
+    X = df[FEATURE_COLUMNS].copy()
+    y = df[TARGET_COLUMN].copy()
+    class_labels = sorted(y.unique().tolist())
 
     X_train, X_test, y_train, y_test = train_test_split(
         X,
@@ -72,8 +73,18 @@ def train_classifier(
     y_pred = clf.predict(X_test)
 
     accuracy = accuracy_score(y_test, y_pred)
-    report = classification_report(y_test, y_pred, output_dict=True)
-    confusion = confusion_matrix(y_test, y_pred, labels=sorted(y.unique()))
+    report = classification_report(
+        y_test,
+        y_pred,
+        labels=class_labels,
+        output_dict=True,
+        zero_division=0,
+    )
+    confusion = confusion_matrix(
+        y_test,
+        y_pred,
+        labels=class_labels,
+    )
 
     model_dir = ensure_directory(model_dir)
     joblib.dump(clf, model_dir / "pelagia_decision_tree.joblib")
@@ -86,17 +97,23 @@ def train_classifier(
 
     confusion_df = pd.DataFrame(
         confusion,
-        index=sorted(y.unique()),
-        columns=sorted(y.unique()),
+        index=class_labels,
+        columns=class_labels,
     )
     save_dataframe(confusion_df, model_dir / "confusion_matrix.csv")
+
+    predictions_df = X_test.copy()
+    predictions_df["true_label"] = y_test.values
+    predictions_df["predicted_label"] = y_pred
+    predictions_df["correct"] = predictions_df["true_label"] == predictions_df["predicted_label"]
+    save_dataframe(predictions_df, model_dir / "test_predictions.csv")
 
     metrics = {
         "accuracy": float(accuracy),
         "n_train": int(len(X_train)),
         "n_test": int(len(X_test)),
         "n_features": int(X.shape[1]),
-        "classes": sorted(y.unique().tolist()),
+        "classes": class_labels,
     }
 
     metrics_df = pd.DataFrame([metrics])
@@ -108,6 +125,11 @@ def train_classifier(
         "report_df": report_df,
         "confusion_df": confusion_df,
         "rules_text": rules_text,
+        "X_test": X_test,
+        "y_test": y_test,
+        "y_pred": y_pred,
+        "class_labels": class_labels,
+        "predictions_df": predictions_df,
     }
 
 
