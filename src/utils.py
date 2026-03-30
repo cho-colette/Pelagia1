@@ -58,11 +58,7 @@ def normalise_signal(values: np.ndarray) -> np.ndarray:
     return values / denom
 
 
-def save_dataframe(
-    df: pd.DataFrame,
-    output_path: str | Path,
-    index: bool = False,
-) -> None:
+def save_dataframe(df: pd.DataFrame, output_path: str | Path, index: bool = False) -> None:
     output_path = Path(output_path)
     ensure_directory(output_path.parent)
     df.to_csv(output_path, index=index)
