@@ -117,7 +117,7 @@ def train_classifier(
     }
 
     metrics_df = pd.DataFrame([metrics])
-    save_dataframe(metrics_df, model_dir / "classifier_metrics.csv")
+    save_dataframe(confusion_df, model_dir / "confusion_matrix.csv", index=True)
 
     return {
         "model": clf,
