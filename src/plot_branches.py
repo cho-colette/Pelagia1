@@ -15,20 +15,24 @@ def plot_decision_tree_figure(
     model_path: str | Path = "results/models/pelagia_decision_tree.joblib",
     output_path: str | Path = "figures/pelagia_decision_tree.png",
     dpi: int = 200,
+    figsize: tuple[int, int] = (32, 18),
+    fontsize: int = 22,
 ) -> Path:
     clf = joblib.load(model_path)
 
     output_path = Path(output_path)
     ensure_directory(output_path.parent)
 
-    fig, ax = plt.subplots(figsize=(20, 10))
+    class_names = [str(c).replace("_", " ") for c in clf.classes_]
+
+    fig, ax = plt.subplots(figsize=figsize)
     plot_tree(
         clf,
         feature_names=FEATURE_COLUMNS,
-        class_names=[str(c) for c in clf.classes_],
+        class_names=class_names,
         filled=True,
         rounded=True,
-        fontsize=8,
+        fontsize=fontsize,
         ax=ax,
     )
     fig.tight_layout()
@@ -41,28 +45,35 @@ def plot_confusion_matrix_heatmap(
     confusion_csv: str | Path = "results/models/confusion_matrix.csv",
     output_path: str | Path = "figures/pelagia_confusion_matrix.png",
     dpi: int = 200,
+    figsize: tuple[int, int] = (10, 8),
+    label_fontsize: int = 16,
+    tick_fontsize: int = 14,
+    value_fontsize: int = 14,
+    title_fontsize: int = 18,
 ) -> Path:
     cm = pd.read_csv(confusion_csv, index_col=0)
 
     output_path = Path(output_path)
     ensure_directory(output_path.parent)
 
-    fig, ax = plt.subplots(figsize=(7, 5))
+    fig, ax = plt.subplots(figsize=figsize)
     im = ax.imshow(cm.values)
 
     ax.set_xticks(range(len(cm.columns)))
     ax.set_yticks(range(len(cm.index)))
-    ax.set_xticklabels(cm.columns, rotation=45, ha="right")
-    ax.set_yticklabels(cm.index)
-    ax.set_xlabel("Predicted label")
-    ax.set_ylabel("True label")
-    ax.set_title("Pelagia classifier confusion matrix")
+    ax.set_xticklabels(cm.columns, rotation=30, ha="right", fontsize=tick_fontsize)
+    ax.set_yticklabels(cm.index, fontsize=tick_fontsize)
+    ax.set_xlabel("Predicted label", fontsize=label_fontsize)
+    ax.set_ylabel("True label", fontsize=label_fontsize)
+    ax.set_title("Pelagia classifier confusion matrix", fontsize=title_fontsize)
 
     for i in range(cm.shape[0]):
         for j in range(cm.shape[1]):
-            ax.text(j, i, str(cm.iloc[i, j]), ha="center", va="center")
+            ax.text(j, i, str(cm.iloc[i, j]), ha="center", va="center", fontsize=value_fontsize)
 
-    fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
+    cbar = fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
+    cbar.ax.tick_params(labelsize=tick_fontsize)
+
     fig.tight_layout()
     fig.savefig(output_path, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
