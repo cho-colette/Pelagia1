@@ -16,7 +16,7 @@ def plot_decision_tree_figure(
     output_path: str | Path = "figures/pelagia_decision_tree.png",
     dpi: int = 200,
     figsize: tuple[int, int] = (32, 18),
-    fontsize: int = 22,
+    fontsize: int = 26,
 ) -> Path:
     clf = joblib.load(model_path)
 
