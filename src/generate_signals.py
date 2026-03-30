@@ -234,11 +234,9 @@ def _sample_state_parameters(state_id: int, rng: np.random.Generator) -> dict[st
 def generate_state_case(config: SignalConfig, state_id: int, sample_idx: int = 0) -> pd.DataFrame:
     t = build_time_array(config.duration_s, config.sample_rate_hz)
 
-    # Deterministic default for reproducible paper results.
-    # For a more realistic stochastic mode later, you could use:
-    # rng = np.random.default_rng()
-    case_seed = int(config.random_seed + 1000 * state_id + sample_idx)
-    rng = np.random.default_rng(case_seed)
+    # Randomised branch: do not lock each case to a deterministic per-case seed.
+    # This keeps class structure but introduces stochastic variation across runs.
+    rng = np.random.default_rng()
 
     params = _sample_state_parameters(state_id, rng)
 
