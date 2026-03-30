@@ -1,3 +1,5 @@
+This branch uses 120 synthetic samples per operating state for expanded evaluation.
+
 # Pelagia1
 
 Pelagia is a novel near-shore wave-energy platform with an interpretable edge-intelligence layer for monitoring and decision support.
