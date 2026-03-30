@@ -325,7 +325,7 @@ def generate_state_case(config: SignalConfig, state_id: int, sample_idx: int = 0
 
 def generate_dataset(
     config: SignalConfig,
-    samples_per_state: int = 12,
+    samples_per_state: int = 120,
     output_dir: str | Path = "data/synthetic_signals",
 ) -> pd.DataFrame:
     np.random.seed(config.random_seed)
