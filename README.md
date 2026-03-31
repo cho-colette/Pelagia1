@@ -1,4 +1,5 @@
-This branch uses 120 synthetic samples per operating state with randomized signal generation for stochastic signal evaluation. Named it '20' by mistake, but generated notebook results as is, so not touching the name at this point.
+This branch uses 120 synthetic samples per operating state with randomized signal generation for stochastic signal evaluation, runs 100 runs afterward to gain statistical analysis on reproducibility. 
+(Side Note: Named the branch '20' by mistake, but generated notebook results as is, so not touching the name at this point.)
 
 # Pelagia1
 
